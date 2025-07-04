@@ -39,8 +39,8 @@ const enviarReporteSemanal = async (client: ClientProxy, ids: string[] = [], not
 
                 let reporte = await generarReporteSemanal(obra, subetapas_response);
                 if (reporte != null) {
-                    switch (process.env.ISPRODUCTION) {
-                        case 'false':
+                    switch (envs.isProduction) {
+                        case false:
                             // if (obra.idWSgroup) await whataspp.enviar_mensaje('5491166584411@c.us', reporte);
                             break;
                         default:
@@ -169,7 +169,6 @@ const enviarReporteViaMail = async (client: ClientProxy, reporte: string) => {
     try {
         for (let to of destinos) {
             const user: Usuario = await firstValueFrom(client.send('usuarios.obtenerUsuario', { usuarioId: to }));
-
             await email.generateAndSendEmail(
                 {
                     message: reporte,

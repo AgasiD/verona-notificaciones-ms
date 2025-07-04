@@ -11,7 +11,7 @@ export class WaapiService {
 
     constructor(private readonly http: HttpService) {
         this.API_TOKEN =  envs.wsApiToken;
-        this.ID_INSTANCE =envs.wsInstanceId;
+        this.ID_INSTANCE = envs.wsInstanceId;
         this.URL = 'https://waapi.app/api/v1/instances';
         this.HEADERS = { 
             'accept': 'application/json',

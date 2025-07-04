@@ -55,7 +55,7 @@ export class PushNotificactionService {
     async sendNotificationToOne(body = 'no body', title = 'no title', data = {}, to, auth_token) {
         const access_token = await this.getAccessToken();
         try {
-            if (process.env.NODE_ENV == 'prod' || process.env.NODE_ENV == 'dev') {
+            if (envs.isProduction) {
                 let _http = HttpService;
                 let bodySend =
                 {
@@ -81,7 +81,7 @@ export class PushNotificactionService {
                     }
                 }
 
-                await this.http.post(`${process.env.NOTIFICATION_URI}`, {
+                await this.http.post(`${envs.pushNotificationUri}`, {
                     "Authorization": `Bearer ${access_token}`
                 }, bodySend);
             }

@@ -13,6 +13,7 @@ interface EnvVars {
     EMAIL: string,
     PASSWORD_EMAIL: string,
     ROOT_BACKUP_FOLDER: string,
+    ISPRODUCTION: boolean,
 }
 
 const envsSchema = joi.object({
@@ -24,7 +25,8 @@ const envsSchema = joi.object({
     PUSH_NOTIFICATION_URI: joi.string().required(),
     EMAIL: joi.string().required(),
     PASSWORD_EMAIL: joi.string().required(),
-    ROOT_BACKUP_FOLDER:joi.string().required(),
+    ROOT_BACKUP_FOLDER: joi.string().required(),
+    ISPRODUCTION: joi.boolean().required(),
 }).unknown(true)
 
 const { error, value } = envsSchema.validate({
@@ -48,6 +50,7 @@ export const envs = {
     pushNotificationUri: envVars.PUSH_NOTIFICATION_URI,
     email: envVars.EMAIL,
     passwordEmail: envVars.PASSWORD_EMAIL,
-    rootBackupFolder: envVars.ROOT_BACKUP_FOLDER
+    rootBackupFolder: envVars.ROOT_BACKUP_FOLDER,
+    isProduction: envVars.ISPRODUCTION
 }
 

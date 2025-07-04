@@ -1,5 +1,6 @@
 import { RpcException } from "@nestjs/microservices";
 import { AxiosResponse } from "axios";
+import { envs } from "src/config/envs";
 
 const fs = require('fs').promises;
 var jwt = require('jsonwebtoken');
@@ -68,7 +69,7 @@ export async function leerArchivo(path) {
 export async function generarJWT(id, expires = 6) {
   return new Promise((resolve, reject) => {
 
-    jwt.sign({ id: id }, process.env.SIGN, {
+    jwt.sign({ id: id }, envs.sign, {
       expiresIn: `${expires}h`
     }, (error, token) => {
 
