@@ -12,8 +12,8 @@ export const obtenerBackup = async (client: ClientProxy) => {
 
         console.log('Recuperando base de datos...');
 
-        const response_backup = await firstValueFrom(client.send('files.backup', {backupFolderId: envs.rootBackupFolder}))
-        if( !response_backup.success )
+        const response_backup = await firstValueFrom(client.send('files.backup', { backupFolderId: envs.rootBackupFolder }))
+        if (!response_backup.success)
             throw new Error(response_backup.message)
 
         console.log('Base de datos grabada')

@@ -7,16 +7,14 @@ import { Usuario } from "../entities/usuario.entity";
 import { WhatsApp } from "src/whatsapp/entities/whatsapp.entity";
 import { Tarea } from "../entities/tarea.entity";
 import { SubEtapa } from "../entities/subetapa.entity";
-import { ConfigService } from "src/services/config/config.service";
 import { Config } from "src/services/config/config.entity";
 
 
 export const verifica_enviarReporteSemanal = async (client: ClientProxy, config: Config) => {
 
-    
-    if (config.send_ws_reports == true) {
-        await enviarReporteSemanal(client, [], config.obras_not_send_report);
-    }
+    if (config.send_ws_reports != true) return
+
+    await enviarReporteSemanal(client, [], config.obras_not_send_report);
 
 }
 
@@ -41,13 +39,13 @@ const enviarReporteSemanal = async (client: ClientProxy, ids: string[] = [], not
                 if (reporte != null) {
                     switch (envs.isProduction) {
                         case false:
-                            // if (obra.idWSgroup) await whataspp.enviar_mensaje('5491166584411@c.us', reporte);
+                            if (obra.idWSgroup) await whataspp.enviar_mensaje('5491166584411@c.us', reporte);
                             break;
                         default:
-                            // if (obra.idWSgroup) await whataspp.enviar_mensaje(obra.idWSgroup, reporte);
+                            if (obra.idWSgroup) await whataspp.enviar_mensaje(obra.idWSgroup, reporte);
                             if (obra.idWScontacts && obra.idWScontacts.length > 0) {
                                 for (let contact of obra.idWScontacts) {
-                                    // await whataspp.enviar_mensaje(contact, reporte);
+                                     await whataspp.enviar_mensaje(contact, reporte);
                                 }
                             }
                             break;
@@ -156,12 +154,14 @@ const generarReporteSemanal = async (obra: Obra, nombres_subetapas: SubEtapa[]) 
 }
 
 const enviarReporteViaMail = async (client: ClientProxy, reporte: string) => {
-    const destinos = [
-        // '-N1JMWIorvf_BK0dXi5k',// Martín Conti
-        // '-N1JMn2-R5mlliaJpG3r',// Federico Crivelli
-        // '-N1JTcvbeSczx-NsVWlz',// Tomás Gordillo
-        '-N1BR-0DeEd6GvgGdgJt' // Damián Agasi
-    ]
+    const destinos = envs.isProduction
+        ? [
+            '-N1JMWIorvf_BK0dXi5k',// Martín Conti
+            '-N1JMn2-R5mlliaJpG3r',// Federico Crivelli
+            '-N1JTcvbeSczx-NsVWlz',// Tomás Gordillo
+        ]
+        : ['-N1BR-0DeEd6GvgGdgJt']// Damián Agasi
+
 
     const email = new EmailSender(envs.email, envs.passwordEmail);
     const asunto = `VERONA APP | Reporte semanal`
@@ -178,11 +178,9 @@ const enviarReporteViaMail = async (client: ClientProxy, reporte: string) => {
             );
         }
 
-        console.log('Correos enviados');
         return [true]
     } catch (err) {
         console.log(err);
-        console.log('Error al enviar correos');
         return [false, err]
 
     }

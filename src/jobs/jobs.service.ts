@@ -3,7 +3,6 @@ import { obtenerBackup } from './jobs/backup.job';
 import { NATS_SERVICE } from 'src/config/services';
 import { ClientProxy } from '@nestjs/microservices';
 import { Cron } from './entities/Cron';
-
 import { ConfigService } from 'src/services/config/config.service';
 import { verifica_enviarReporteSemanal } from './jobs/report.job';
 

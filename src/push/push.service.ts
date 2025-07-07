@@ -1,7 +1,6 @@
 import { HttpService } from "src/common/services/http/http.service";
 import { envs } from "src/config/envs";
 
-import { google } from 'googleapis';
 
 export class PushNotificactionService {
 
