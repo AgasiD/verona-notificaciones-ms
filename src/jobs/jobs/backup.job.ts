@@ -8,6 +8,7 @@ import { firstValueFrom } from "rxjs";
 export const obtenerBackup = async (client: ClientProxy) => {
 
     const emailSender = new EmailSender(envs.email, envs.passwordEmail);
+    
     try {
 
         console.log('Recuperando base de datos...');

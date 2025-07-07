@@ -8,12 +8,14 @@ import { WhatsApp } from "src/whatsapp/entities/whatsapp.entity";
 import { Tarea } from "../entities/tarea.entity";
 import { SubEtapa } from "../entities/subetapa.entity";
 import { Config } from "src/services/config/config.entity";
+import { Logger } from "@nestjs/common";
 
 
 export const verifica_enviarReporteSemanal = async (client: ClientProxy, config: Config) => {
 
     if (config.send_ws_reports != true) return
 
+    Logger.log('Reporte semanal activado');
     await enviarReporteSemanal(client, [], config.obras_not_send_report);
 
 }
