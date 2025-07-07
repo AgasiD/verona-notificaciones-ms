@@ -19,7 +19,6 @@ export class JobsService {
     async initJobs() {
         const config = await this.configService.load_config();
         const cron = new Cron();
-        await obtenerBackup(this.client)
         cron.nuevo_job({
             tiempo: config.schedule_backup,
             callback: async () => await obtenerBackup(this.client)
