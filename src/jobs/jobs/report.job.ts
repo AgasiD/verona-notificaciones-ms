@@ -16,7 +16,7 @@ export const verifica_enviarReporteSemanal = async (client: ClientProxy, config:
     if (config.send_ws_reports != true) return
 
     Logger.log('Reporte semanal activado');
-    await enviarReporteSemanal(client, [], config.obras_not_send_report);
+    // await enviarReporteSemanal(client, [], config.obras_not_send_report);
 
 }
 
