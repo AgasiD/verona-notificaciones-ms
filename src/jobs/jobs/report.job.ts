@@ -16,52 +16,53 @@ export const verifica_enviarReporteSemanal = async (client: ClientProxy, config:
     if (config.send_ws_reports != true) return
 
     Logger.log('Reporte semanal activado');
-    // await enviarReporteSemanal(client, [], config.obras_not_send_report);
+    await enviarReporteSemanal(client, [], config.obras_not_send_report);
 
 }
 
 
 const enviarReporteSemanal = async (client: ClientProxy, ids: string[] = [], not_ids: string[] = []) => {
 
-    let obras: Obra[] = await firstValueFrom(client.send('obras.obtenerObras', {}));
-    if (ids.length > 0) obras = obras.filter(obra => ids.includes(obra.id!));
+    console.log('Enviando reporte semanal...');
+    // let obras: Obra[] = await firstValueFrom(client.send('obras.obtenerObras', {}));
+    // if (ids.length > 0) obras = obras.filter(obra => ids.includes(obra.id!));
 
-    if (not_ids.length > 0) obras = obras.filter(obra => !not_ids.includes(obra.id!));
+    // if (not_ids.length > 0) obras = obras.filter(obra => !not_ids.includes(obra.id!));
 
-    const whataspp = new WhatsApp(envs.wsApiToken, envs.wsInstanceId);
+    // const whataspp = new WhatsApp(envs.wsApiToken, envs.wsInstanceId);
 
-    let reporte_completo = '';
-    for (let obra of obras) {
-        if (!not_ids.includes(obra.id!)) {
-            try {
-                obra.etapas = await firstValueFrom(client.send('obras.controlObra', { obraId: obra.id! }))
-                const subetapas_response: SubEtapa[] = await firstValueFrom(client.send('subetapas.obtenerSubetapas', {}))
+    // let reporte_completo = '';
+    // for (let obra of obras) {
+    //     if (!not_ids.includes(obra.id!)) {
+    //         try {
+    //             obra.etapas = await firstValueFrom(client.send('obras.controlObra', { obraId: obra.id! }))
+    //             const subetapas_response: SubEtapa[] = await firstValueFrom(client.send('subetapas.obtenerSubetapas', {}))
 
-                let reporte = await generarReporteSemanal(obra, subetapas_response);
-                if (reporte != null) {
-                    switch (envs.isProduction) {
-                        case false:
-                            if (obra.idWSgroup) await whataspp.enviar_mensaje('5491166584411@c.us', reporte);
-                            break;
-                        default:
-                            if (obra.idWSgroup) await whataspp.enviar_mensaje(obra.idWSgroup, reporte);
-                            if (obra.idWScontacts && obra.idWScontacts.length > 0) {
-                                for (let contact of obra.idWScontacts) {
-                                     await whataspp.enviar_mensaje(contact, reporte);
-                                }
-                            }
-                            break;
-                    }
-                    reporte_completo += `\n\n====${obra.nombre} - ${obra.lote}====`
-                    reporte_completo += reporte;
-                }
-                console.log(`Mensajes enviados: ${obra.nombre}`)
-            } catch (err) {
-                console.log(`Error al enviar mensaje: ${obra.nombre}`)
-            }
-        }
-    }
-    ((await enviarReporteViaMail(client, reporte_completo))[0])
+    //             let reporte = await generarReporteSemanal(obra, subetapas_response);
+    //             if (reporte != null) {
+    //                 switch (envs.isProduction) {
+    //                     case false:
+    //                         if (obra.idWSgroup) await whataspp.enviar_mensaje('5491166584411@c.us', reporte);
+    //                         break;
+    //                     default:
+    //                         if (obra.idWSgroup) await whataspp.enviar_mensaje(obra.idWSgroup, reporte);
+    //                         if (obra.idWScontacts && obra.idWScontacts.length > 0) {
+    //                             for (let contact of obra.idWScontacts) {
+    //                                  await whataspp.enviar_mensaje(contact, reporte);
+    //                             }
+    //                         }
+    //                         break;
+    //                 }
+    //                 reporte_completo += `\n\n====${obra.nombre} - ${obra.lote}====`
+    //                 reporte_completo += reporte;
+    //             }
+    //             console.log(`Mensajes enviados: ${obra.nombre}`)
+    //         } catch (err) {
+    //             console.log(`Error al enviar mensaje: ${obra.nombre}`)
+    //         }
+    //     }
+    // }
+    // ((await enviarReporteViaMail(client, reporte_completo))[0])
 
 }
 
@@ -131,8 +132,6 @@ const generarReporteSemanal = async (obra: Obra, nombres_subetapas: SubEtapa[]) 
 
         if (tareas_realizadas.filter(t => !t.realizado).length > 0) {
             texto += '\nLas siguientes tareas han sido iniciadas ☑️\n';
-
-
             for (let sub of subetapas) {
                 let tareas_insertar = tareas_realizadas.filter(t => !t.realizado && t.subetapa.includes(sub.id));
                 if (tareas_insertar.length > 0) {
@@ -144,9 +143,7 @@ const generarReporteSemanal = async (obra: Obra, nombres_subetapas: SubEtapa[]) 
                 }
             }
         }
-
         texto += '\n¡Seguimos avanzando con los trabajos!';
-
 
     } else {
         texto = '';
@@ -179,7 +176,6 @@ const enviarReporteViaMail = async (client: ClientProxy, reporte: string) => {
                 }
             );
         }
-
         return [true]
     } catch (err) {
         console.log(err);
