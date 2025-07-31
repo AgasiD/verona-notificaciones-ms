@@ -28,6 +28,7 @@ export class JobsService {
             tiempo: config.schedule_send_report,
             callback: async () => {
                 await verifica_enviarReporteSemanal(this.client, config);
+            
             }
         })
 
