@@ -23,7 +23,7 @@ export class JobsService {
             tiempo: config.schedule_backup,
             callback: async () => await obtenerBackup(this.client)
         })
-
+        
         cron.nuevo_job({
             tiempo: config.schedule_send_report,
             callback: async () => {
