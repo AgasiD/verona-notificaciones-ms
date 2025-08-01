@@ -59,7 +59,7 @@ const enviarReporteSemanal = async (client: ClientProxy, ids: string[] = [], not
             }
         }
     }
-    // ((await enviarReporteViaMail(client, reporte_completo))[0])
+    ((await enviarReporteViaMail(client, reporte_completo))[0])
 
 }
 
